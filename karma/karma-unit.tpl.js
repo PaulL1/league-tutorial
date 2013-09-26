@@ -55,7 +55,6 @@ module.exports = function ( karma ) {
      * the aesthetic advantage of not launching a browser every time you save.
      */
     browsers: [
-      'Firefox'
     ]
   });
 };
