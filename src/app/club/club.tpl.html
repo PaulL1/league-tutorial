@@ -1,0 +1,17 @@
+<div>
+  <h1>Club functions</h1>
+  <p>Soon this will show a list of all the clubs, based on information from the server</p>
+</div>
+
+<div class="body">
+  <table>
+    <thead>
+      <td>Name</td>
+      <td>Contact Officer</td>
+    </thead>
+    <tr ng-repeat="club in clubs">
+      <td>{{club.name}}</td>
+      <td>{{club.contact_officer}}</td>
+    </tr>
+  </table>
+</div>

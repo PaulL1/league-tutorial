@@ -1,16 +1,12 @@
 {
-  "author": "Josh David Miller",
-  "name": "ng-boilerplate",
-  "version": "0.3.1",
-  "homepage": "http://bit.ly/ng-boilerplate",
-  "licenses": {
-    "type": "MIT",
-    "url": "https://raw.github.com/joshdmiller/ng-boilerplate/master/LICENSE"
-  },
-  "bugs": "https://github.com/joshdmiller/ng-boilerplate/issues",
+  "author": "",
+  "name": "league",
+  "version": "0.0.1",
+  "homepage": "https://github.com/PaulL1/league-tutorial",
+  "bugs": "https://github.com/PaulL1/league-tutorial",
   "repository": {
     "type": "git",
-    "url": "git@github.com:joshdmiller/ng-boilerplate.git"
+    "url": "https://github.com/PaulL1/league-tutorial"
   },
   "dependencies": {},
   "devDependencies": {
