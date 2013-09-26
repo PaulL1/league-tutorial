@@ -4,14 +4,5 @@
 </div>
 
 <div class="body">
-  <table>
-    <thead>
-      <td>Name</td>
-      <td>Contact Officer</td>
-    </thead>
-    <tr ng-repeat="club in clubs">
-      <td>{{club.name}}</td>
-      <td>{{club.contact_officer}}</td>
-    </tr>
-  </table>
+  <div class="gridStyle" ng-grid="gridOptions"></div>
 </div>
