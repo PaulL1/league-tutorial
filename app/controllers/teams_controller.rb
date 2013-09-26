@@ -6,7 +6,8 @@ class TeamsController < ApplicationController
   # GET /teams
   # GET /teams.json
   def index
-    @teams = Team.all
+    @teams = Team.joins('LEFT OUTER JOIN clubs on teams.club_id = clubs.id').select('teams.*, clubs.name as club_name')
+
     render json: @teams
   end
 

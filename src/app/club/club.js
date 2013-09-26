@@ -26,7 +26,7 @@ angular.module( 'league.club', [
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'ClubCtrl', function ClubController( $scope, ClubRes, $dialog ) {
+.controller( 'ClubCtrl', function ClubController( $scope, ClubRes, $dialog, $location ) {
   $scope.clubs = ClubRes.query();
   $scope.gridOptions = {
     data: 'clubs',
@@ -35,7 +35,8 @@ angular.module( 'league.club', [
       {field: 'name', displayName: 'Club Name'},
       {field: 'contact_officer', displayName: 'Contact Officer'},
       {displayName: 'Edit', cellTemplate: '<button id="editBtn" type="button" class="btn btn-primary" ng-click="editClub(row.entity)" >Edit</button> '},
-      {displayName: 'Delete', cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteClub(row.entity)" >Delete</button> '}
+      {displayName: 'Delete', cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteClub(row.entity)" >Delete</button> '},
+      {displayName: 'Show Teams', cellTemplate: '<button id="showBtn" type="button" class="btn btn-primary" ng-click="showTeams(row.entity)" >Show Teams</button> '}
     ],
     multiSelect: false
   };
@@ -68,6 +69,10 @@ angular.module( 'league.club', [
                     $scope.msgbox = $dialog.messageBox('Error', error, [{label: 'OK'}]);
                     $scope.msgbox.open();
                   });
+  };
+
+  $scope.showTeams = function(club) {
+    $location.path("/team").search({club_id: club.id});
   };
 })
 
