@@ -1,0 +1,29 @@
+<%= form_for(@club) do |f| %>
+  <% if @club.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@club.errors.count, "error") %> prohibited this club from being saved:</h2>
+
+      <ul>
+      <% @club.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :contact_officer %><br />
+    <%= f.text_field :contact_officer %>
+  </div>
+  <div class="field">
+    <%= f.label :date_created %><br />
+    <%= f.datetime_select :date_created %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
