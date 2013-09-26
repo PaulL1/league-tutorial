@@ -3,6 +3,9 @@
 </div>
 
 <div class="modal-body">
+  <div ng-show="error" class="error">
+    <p>Error: {{error.data}}</p>
+  </div>
   <p>Name: <input ng-model="club.name" /></p>
   <p>Contact Officer: <input ng-model="club.contact_officer" /></p>
 </div>

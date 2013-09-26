@@ -34,42 +34,80 @@ angular.module( 'league.club', [
       {field: 'id', displayName: 'Id'},
       {field: 'name', displayName: 'Club Name'},
       {field: 'contact_officer', displayName: 'Contact Officer'},
-      {displayName: 'Edit', cellTemplate: '<button id="editBtn" type="button" class="btn btn-primary" ng-click="editClub(row.entity)" >Edit</button> '}
+      {displayName: 'Edit', cellTemplate: '<button id="editBtn" type="button" class="btn btn-primary" ng-click="editClub(row.entity)" >Edit</button> '},
+      {displayName: 'Delete', cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteClub(row.entity)" >Delete</button> '}
     ],
     multiSelect: false
   };
 
   $scope.editClub = function(club) {
-    $scope.myDialog = $dialog.dialog({dialogFade: false, resolve: {club: function(){return angular.copy(club);}}});
+    $scope.myDialog = $dialog.dialog({dialogFade: false, resolve: {club: function(){return angular.copy(club);}, isNew: function() {return false;}}});
     $scope.myDialog.open('club/club_edit.tpl.html', 'ClubEditCtrl').then(function(result){
       if (result === 'cancel'){}
       else {
         $scope.clubs = ClubRes.query();
       }
     });  
-  };  
+  };
+  
+  $scope.newClub = function() {
+    $scope.myDialog = $dialog.dialog({dialogFade: false, resolve: {club: function(){return new ClubRes(); }, isNew: function() {return true;}}});
+    $scope.myDialog.open('club/club_edit.tpl.html', 'ClubEditCtrl').then(function(result){
+      if (result === 'cancel'){}
+      else {
+        $scope.clubs = ClubRes.query();
+      }
+    });
+  };    
+
+  $scope.deleteClub = function(club) {
+    club.$remove (function() {
+                      $scope.clubs = ClubRes.query();
+                    }, 
+                  function(error) {
+                    $scope.msgbox = $dialog.messageBox('Error', error, [{label: 'OK'}]);
+                    $scope.msgbox.open();
+                  });
+  };
 })
 
 /**
  * We define a controller for the edit action
  */
-.controller('ClubEditCtrl', function ClubEditController($scope, ClubRes, dialog, club) {
+.controller('ClubEditCtrl', function ClubEditController($scope, ClubRes, dialog, club, isNew) {
   $scope.club = club;
   $scope.submit = function() {
-    $scope.club.$update(function(data) {
-                            dialog.close($scope.club);      
-                          });
-   };
+    if (isNew) {
+      $scope.club.$save(function(data) {
+                              dialog.close($scope.club);      
+                            }, 
+                          function(error) {
+                              // don't close dialog, display an error
+                              $scope.error = error;                              
+                            });
+    }
+    else {
+      $scope.club.$update(function(data) {
+                              dialog.close($scope.club);      
+                            }, 
+                            function(error) {
+                              // don't close dialog, display an error
+                              $scope.error = error;  
+                            });      
+    }
+
+  };
 
   $scope.cancel = function() {
     dialog.close('cancel');
   };
 })
 
+
 /**
  * Add a resource to allow us to get at the server
  */
 .factory( 'ClubRes', function ( $resource )  {
-  return $resource("../clubs/:id.json", {id:'@id'}, {'update': {method:'PUT'}});
+  return $resource("../clubs/:id.json", {id:'@id'}, {'update': {method:'PUT'}, 'remove': {method: 'DELETE', headers: {'Content-Type': 'application/json'}}});
 })
 ;

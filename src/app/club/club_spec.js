@@ -14,6 +14,7 @@ describe( 'Club functionality', function() {
     scope.httpBackend = _$httpBackend_;
 
     // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
+   // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
     scope.fakeDialog = {
       response: null,
       dialog: function(parameters) {
@@ -25,6 +26,9 @@ describe( 'Club functionality', function() {
       close: function(parameters) {
         return this;
       },
+      messageBox: function(title, message, buttons) {
+        return this;
+      },
       then: function(callBack){
         callBack(this.response);
       }
@@ -32,13 +36,29 @@ describe( 'Club functionality', function() {
     
     // setup a mock for the club entity - it handles both $update and $remove methods, and calls the provided callback immediately (no promise needed)
     scope.fakeClub = {
-      $update: function(callback) {
-        callback(null);
+      precannedResponse: 'success',
+      $save: function(callback_success, callback_fail) {
+        if (this.precannedResponse == 'success') {
+          callback_success(null);
+        } else {
+          callback_fail(null);
+        }        
       },
-      $remove: function(callback) {
-        callback();
+      $update: function(callback_success, callback_fail) {
+        if (this.precannedResponse == 'success') {
+          callback_success(null);
+        } else {
+          callback_fail(null);
+        }
+      },
+      $remove: function(callback_success, callback_fail) {
+        if (this.precannedResponse == 'success') {
+          callback_success(null);
+        } else {
+          callback_fail(null);
+        }
       }
-    };   
+    }; 
   }));
 
   afterEach(function() {
@@ -119,36 +139,126 @@ describe( 'Club functionality', function() {
         scope.$digest();        
         scope.httpBackend.flush();
       });
+
+      it('Calls new, result cancel', function() {
+        scope.fakeDialog.response = 'cancel';
+
+        // we expect the fakeDialog dialog and open methods to be called, so we spy on them to get the parameters
+        spyOn(scope.fakeDialog, "dialog").andCallThrough();
+        spyOn(scope.fakeDialog, "open").andCallThrough();
+        
+        // call new
+        scope.newClub();
+
+        // check parameters passed in
+        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
+        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.open).toHaveBeenCalledWith('club/club_edit.tpl.html', 'ClubEditCtrl');
+      });
+    
+      it('Calls new, result OK', function() {
+        scope.fakeDialog.response = 'not-cancel';
+
+        // we expect the fakeDialog dialog and open methods to be called, so we spy on them to get the parameters
+        spyOn(scope.fakeDialog, "dialog").andCallThrough();
+        spyOn(scope.fakeDialog, "open").andCallThrough();
+                
+        // call new
+        scope.newClub();
+
+        // check parameters passed in
+        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
+        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.open).toHaveBeenCalledWith('club/club_edit.tpl.html', 'ClubEditCtrl');
+
+        // expect a query refresh
+        scope.httpBackend.expect('GET', '../clubs.json').respond([]);
+        scope.$digest();
+        scope.httpBackend.flush();        
+      });
+
+      it('Calls delete, no error, and requeries', function() {
+        // we expect the remove method to be called on fakeClub, so we spy on fakeClub
+        spyOn(scope.fakeClub, "$remove").andCallThrough();
+        
+        // we expect a messagebox not to be displayed, so we spy on fakeDialog
+        spyOn(scope.fakeDialog, "messageBox").andCallThrough();
+        
+        // call the delete
+        scope.deleteClub(scope.fakeClub);
+        
+        // expect stuff to have happened
+        expect(scope.fakeClub.$remove).toHaveBeenCalled();
+        expect(scope.fakeDialog.messageBox).not.toHaveBeenCalled();
+        
+        // expect a refresh on the query
+        scope.httpBackend.expect('GET', '../clubs.json').respond([]);
+        scope.$digest();
+        scope.httpBackend.flush();        
+      });
+
+      it('Calls delete, gets error, and shows error box', function() {
+        // we expect the remove method to be called on fakeClub, so we spy on the fakeClub methods
+        spyOn(scope.fakeClub, "$remove").andCallThrough();
+        
+        // we expect a messagebox not to be displayed, so we spy on fakeDialog
+        spyOn(scope.fakeDialog, "messageBox").andCallThrough();
+
+        // set the mock to return an error
+        scope.fakeClub.precannedResponse = 'not-success';
+        
+        // call the delete
+        scope.deleteClub(scope.fakeClub);
+        
+        // expect an error mesageBox to have been shown
+        expect(scope.fakeClub.$remove).toHaveBeenCalled();
+        expect(scope.fakeDialog.messageBox).toHaveBeenCalledWith('Error', null, [{label: 'OK'}]);
+      });
     });
   });
 
-  describe( 'Edit controller', function() {
+  describe( 'Edit controller:', function() {
     //mock the controller
     beforeEach(angular.mock.inject(function($controller){
-
+      // setup a mock for the isNew flag
+      scope.isNew = false;
+  
       //declare the controller and inject our parameters
-      $controller('ClubEditCtrl', {$scope: scope, dialog: scope.fakeDialog, club: scope.fakeClub});
+      $controller('ClubEditCtrl', {$scope: scope, dialog: scope.fakeDialog, club: scope.fakeClub, isNew: scope.isNew});
     }));
-
+  
     // tests start here
-    it('Submit calls put on server', function(){
+    it('Submit calls put on server, put succeeds', function(){
       // we expect $update to be called on fakeClub, and close to be called on fakeDialog
+      spyOn(scope.fakeClub, "$update").andCallThrough();
+      spyOn(scope.fakeDialog, "close").andCallThrough();
+      
+      scope.submit();
+      
+      expect(scope.fakeClub.$update).toHaveBeenCalled();
+      expect(scope.fakeDialog.close).toHaveBeenCalled();
+    }); 
+    
+    it('Submit calls put on server, put fails', function(){
+      scope.fakeClub.precannedResponse = 'fail';
+
+      // we expect $update to be called on fakeClub, and close not to be called on fakeDialog
       spyOn(scope.fakeClub, "$update").andCallThrough();
       spyOn(scope.fakeDialog, "close").andCallThrough();
 
       scope.submit();
-
+      
       expect(scope.fakeClub.$update).toHaveBeenCalled();
-      expect(scope.fakeDialog.close).toHaveBeenCalled();
+      expect(scope.fakeDialog.close).not.toHaveBeenCalled();
     }); 
-
+    
     it('Cancel does not call put on server', function(){
       // we expect $update not to be called on fakeClub, and close to be called on fakeDialog
       spyOn(scope.fakeClub, "$update").andCallThrough();
       spyOn(scope.fakeDialog, "close").andCallThrough();
 
       scope.cancel();
-
+      
       expect(scope.fakeClub.$update).not.toHaveBeenCalled();
       expect(scope.fakeDialog.close).toHaveBeenCalledWith('cancel');
     }); 
