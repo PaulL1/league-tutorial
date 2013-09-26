@@ -2,7 +2,8 @@
  * Club module
  */
 angular.module( 'league.club', [
-  'ui.state'
+  'ui.state',
+  'ngResource'
 ])
 
 /**
@@ -24,10 +25,14 @@ angular.module( 'league.club', [
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'ClubCtrl', function ClubController( $scope ) {
-  $scope.clubs = [
-    {name: "hard coded club 1", contact_officer: "hard coded officer 1"},
-    {name: "hard coded club 2", contact_officer: "hard coded officer 2"}
-  ];
+.controller( 'ClubCtrl', function ClubController( $scope, ClubRes ) {
+  $scope.clubs = ClubRes.query();
+})
+
+/**
+ * Add a resource to allow us to get at the server
+ */
+.factory( 'ClubRes', function ( $resource )  {
+  return $resource('../clubs.json');
 })
 ;
