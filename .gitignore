@@ -13,3 +13,9 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+*.sw*
+*~
+build/
+bin/
+node_modules/
+vendor/
