@@ -13,8 +13,7 @@
  * specified, as shown below.
  */
 angular.module( 'league.home', [
-  'ui.state',
-  'plusOne'
+  'ui.state'
 ])
 
 /**
