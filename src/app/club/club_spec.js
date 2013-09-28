@@ -66,9 +66,7 @@ describe( 'Club functionality', function() {
     beforeEach(angular.mock.inject(function($controller){
       //declare the controller and inject our scope
       $controller('ClubCtrl', {$scope: scope, $dialog: scope.fakeDialog});
-    }));
-    
-    beforeEach(function() {
+
        // setup a mock for the resource - instead of calling the server always return a pre-canned response
       scope.httpBackend.expect('GET', '../clubs.json').respond([
         {"contact_officer":"Contact Officer 1","created_at":"2012-02-02T00:00:00Z","date_created":"2012-01-01T00:00:00Z","id":1,"name":"Club 1","updated_at":"2012-03-03T00:00:00Z"},
@@ -76,8 +74,8 @@ describe( 'Club functionality', function() {
       ]);
       scope.$digest();
       scope.httpBackend.flush();
-    });
-      
+    }));
+    
     describe( 'Initial render', function() {
       it('Has two clubs defined', function(){
         expect(scope.clubs.length).toEqual(2);
