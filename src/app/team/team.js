@@ -52,8 +52,8 @@ angular.module( 'league.team', [
       {field: 'club_id', displayName: 'Club Id', groupable: true, visible: false},
       {field: 'club_name', displayName: 'Club Name', groupable: true},
       {field: 'date_created', displayName: 'Date Created', cellFilter: "date:mediumDate"},
-      {displayName: 'Edit', cellTemplate: '<button class="btn btn-primary" id="editBtn" type="button">Edit</button> '},
-      {displayName: 'Delete', cellTemplate: '<button class="btn btn-primary" id="deleteBtn" type="button">Delete</button> '}
+      {displayName: 'Edit', cellTemplate: '<button id="editBtn" type="button" class="btn btn-primary" ng-click="editTeam(row.entity)" >Edit</button> '},
+      {displayName: 'Delete', cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteTeam(row.entity)" >Delete</button> '}
     ],
     multiSelect: false,
     filterOptions: $scope.filterOptions,
