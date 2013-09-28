@@ -108,7 +108,7 @@ describe( 'Team functionality', function() {
         // check parameters passed in
         expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {team: jasmine.any(Function), isNew: jasmine.any(Function)}});
         expect(scope.fakeDialog.isNew).toEqual(false);
-        expect(scope.fakeDialog.team.contact_officer).toEqual('Captain 1');
+        expect(scope.fakeDialog.team.captain).toEqual('Captain 1');
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('team/team_edit.tpl.html', 'TeamEditCtrl');
       });
 
@@ -125,7 +125,7 @@ describe( 'Team functionality', function() {
         // check parameters passed in
         expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {team: jasmine.any(Function), isNew: jasmine.any(Function)}});
         expect(scope.fakeDialog.isNew).toEqual(false);
-        expect(scope.fakeDialog.team.contact_officer).toEqual('Captain 1');
+        expect(scope.fakeDialog.team.captain).toEqual('Captain 1');
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('team/team_edit.tpl.html', 'TeamEditCtrl');
 
         // expect a get after the successful save 
