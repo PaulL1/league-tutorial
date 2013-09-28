@@ -1,4 +1,4 @@
 class Club < ActiveRecord::Base
   attr_accessible :contact_officer, :date_created, :name
-  validates :name, presence: true
+  validates :name, :contact_officer, presence: true
 end
