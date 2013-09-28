@@ -3,34 +3,31 @@ class TeamsController < ApplicationController
   layout false
   respond_to :json
 
-  # GET /teams
   # GET /teams.json
   def index
     @teams = Team.all
-    render json: @teams
+
+    render_with_protection @teams.to_json
   end
 
-  # GET /teams/1
   # GET /teams/1.json
   def show
     @team = Team.find(params[:id])
 
-    render json: @team
+    render_with_protection @team.to_json
   end
 
-  # POST /teams
   # POST /teams.json
   def create
     @team = Team.new(params[:team])
 
     if @team.save
-      render json: @team, status: :created, location: @team
+      render_with_protection @team.to_json, {status: :created, location: @team}
     else
-      render json: @team.errors, status: :unprocessable_entity
+      render_with_protection @team.errors.to_json, {status: :unprocessable_entity}
     end
   end
 
-  # PUT /teams/1
   # PUT /teams/1.json
   def update
     @team = Team.find(params[:id])
@@ -38,11 +35,10 @@ class TeamsController < ApplicationController
     if @team.update_attributes(params[:team])
       head :no_content
     else
-      render json: @team.errors, status: :unprocessable_entity
+      render_with_protection @team.errors.to_json, {status: :unprocessable_entity}
     end
   end
 
-  # DELETE /teams/1
   # DELETE /teams/1.json
   def destroy
     @team = Team.find(params[:id])
