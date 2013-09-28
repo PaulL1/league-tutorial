@@ -14,7 +14,6 @@ describe( 'Club functionality', function() {
     scope.httpBackend = _$httpBackend_;
 
     // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
-   // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
     scope.fakeDialog = {
       response: null,
       club: null,
