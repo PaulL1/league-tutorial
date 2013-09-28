@@ -3,34 +3,31 @@ class ClubsController < ApplicationController
   layout false
   respond_to :json
 
-  # GET /clubs
   # GET /clubs.json
   def index
     @clubs = Club.all
-    render json: @clubs
+
+    render_with_protection @clubs.to_json
   end
 
-  # GET /clubs/1
   # GET /clubs/1.json
   def show
     @club = Club.find(params[:id])
 
-    render json: @club
+    render_with_protection @club.to_json
   end
 
-  # POST /clubs
   # POST /clubs.json
   def create
     @club = Club.new(params[:club])
 
     if @club.save
-      render json: @club, status: :created, location: @club
+      render_with_protection @club.to_json, {status: :created, location: @club}
     else
-      render json: @club.errors, status: :unprocessable_entity
+      render_with_protection @club.errors.to_json, {status: :unprocessable_entity}
     end
   end
 
-  # PUT /clubs/1
   # PUT /clubs/1.json
   def update
     @club = Club.find(params[:id])
@@ -38,11 +35,10 @@ class ClubsController < ApplicationController
     if @club.update_attributes(params[:club])
       head :no_content
     else
-      render json: @club.errors, status: :unprocessable_entity
+      render_with_protection @club.errors.to_json, {status: :unprocessable_entity}
     end
   end
 
-  # DELETE /clubs/1
   # DELETE /clubs/1.json
   def destroy
     @club = Club.find(params[:id])
