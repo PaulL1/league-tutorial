@@ -17,7 +17,9 @@ describe( 'Club functionality', function() {
    // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
     scope.fakeDialog = {
       response: null,
+      club: null,
       dialog: function(parameters) {
+        this.club = parameters.resolve.club();
         return this;
       },
       open: function(template, controller) {
@@ -99,8 +101,8 @@ describe( 'Club functionality', function() {
         scope.editClub(scope.clubs[0]);
 
         // check parameters passed in
-        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
-        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {club: jasmine.any(Function)}});
+        expect(scope.fakeDialog.club.contact_officer).toEqual('Contact Officer 1');
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('club/club_edit.tpl.html', 'ClubEditCtrl');
       });
 
@@ -115,8 +117,8 @@ describe( 'Club functionality', function() {
         scope.editClub(scope.clubs[0]);
 
         // check parameters passed in
-        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
-        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {club: jasmine.any(Function)}});
+        expect(scope.fakeDialog.club.contact_officer).toEqual('Contact Officer 1');
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('club/club_edit.tpl.html', 'ClubEditCtrl');
 
         // expect a get after the successful save 
