@@ -14,10 +14,13 @@ describe( 'Team functionality', function() {
     scope.httpBackend = _$httpBackend_;
 
     // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
-   // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
     scope.fakeDialog = {
       response: null,
+      isNew: null,
+      team: null,
       dialog: function(parameters) {
+        this.team = parameters.resolve.team();
+        this.isNew = parameters.resolve.isNew();
         return this;
       },
       open: function(template, controller) {
@@ -71,38 +74,27 @@ describe( 'Team functionality', function() {
     beforeEach(angular.mock.inject(function($controller){
       //declare the controller and inject our scope
       $controller('TeamCtrl', {$scope: scope, $dialog: scope.fakeDialog});
+
+       // setup a mock for the resource - instead of calling the server always return a pre-canned response
+      scope.httpBackend.expect('GET', '../teams.json').respond([
+        {"captain":"Captain 1","created_at":"2012-02-02T00:00:00Z","date_created":"2012-01-01T00:00:00Z","id":1,"name":"Team 1","updated_at":"2012-03-03T00:00:00Z"},
+        {"captain":"Captain 2","created_at":"2012-02-02T00:00:00Z","date_created":"2012-01-01T00:00:00Z","id":2,"name":"Team 2","updated_at":"2012-03-03T00:00:00Z"}
+      ]);
+      scope.$digest();
+      scope.httpBackend.flush();
     }));
-    
-    describe( 'Initial render', function() {
-      beforeEach(function() {
-         // setup a mock for the resource - instead of calling the server always return a pre-canned response
-        scope.httpBackend.expect('GET', '../teams.json').respond([
-          {"captain":"Captain 1","created_at":"2012-02-02T00:00:00Z","date_created":"2012-01-01T00:00:00Z","id":1,"name":"Team 1","updated_at":"2012-03-03T00:00:00Z"},
-          {"captain":"Captain 2","created_at":"2012-02-02T00:00:00Z","date_created":"2012-01-01T00:00:00Z","id":2,"name":"Team 2","updated_at":"2012-03-03T00:00:00Z"}
-        ]);
-        scope.$digest();
-        scope.httpBackend.flush();
-      });
-      
-     // tests start here
+   
+    describe( 'Initial render', function() {      
       it('Has two teams defined', function(){
         expect(scope.teams.length).toEqual(2);
       });
 
-      it('First team\'s captain is as expected', function(){
+      it('First team\'s contact officer is as expected', function(){
         expect(scope.teams[0].captain).toEqual('Captain 1');
       });
     });
     
     describe('Other controller methods', function(){
-      beforeEach(function() {
-        // The initial render triggers a get before we get to the method that we're testing.
-        // Drain that before we start the test proper
-        scope.httpBackend.expectGET('../teams.json').respond([]);
-        scope.$digest();
-        scope.httpBackend.flush();
-      });
-      
       it('Calls edit on first row, cancel', function() {
         scope.fakeDialog.response = 'cancel';
 
@@ -114,8 +106,9 @@ describe( 'Team functionality', function() {
         scope.editTeam(scope.teams[0]);
 
         // check parameters passed in
-        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
-        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {team: jasmine.any(Function), isNew: jasmine.any(Function)}});
+        expect(scope.fakeDialog.isNew).toEqual(false);
+        expect(scope.fakeDialog.team.contact_officer).toEqual('Captain 1');
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('team/team_edit.tpl.html', 'TeamEditCtrl');
       });
 
@@ -130,8 +123,9 @@ describe( 'Team functionality', function() {
         scope.editTeam(scope.teams[0]);
 
         // check parameters passed in
-        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
-        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {team: jasmine.any(Function), isNew: jasmine.any(Function)}});
+        expect(scope.fakeDialog.isNew).toEqual(false);
+        expect(scope.fakeDialog.team.contact_officer).toEqual('Captain 1');
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('team/team_edit.tpl.html', 'TeamEditCtrl');
 
         // expect a get after the successful save 
@@ -151,8 +145,8 @@ describe( 'Team functionality', function() {
         scope.newTeam();
 
         // check parameters passed in
-        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
-        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {team: jasmine.any(Function), isNew: jasmine.any(Function)}});
+        expect(scope.fakeDialog.isNew).toEqual(true);
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('team/team_edit.tpl.html', 'TeamEditCtrl');
       });
     
@@ -167,8 +161,8 @@ describe( 'Team functionality', function() {
         scope.newTeam();
 
         // check parameters passed in
-        // haven't worked out how to verify the parameters of dialog, as they're passed as a promise (i.e. as a function), and I can't resolve them'
-        expect(scope.fakeDialog.dialog).toHaveBeenCalled();
+        expect(scope.fakeDialog.dialog).toHaveBeenCalledWith({dialogFade: false, resolve: {team: jasmine.any(Function), isNew: jasmine.any(Function)}});
+        expect(scope.fakeDialog.isNew).toEqual(true);
         expect(scope.fakeDialog.open).toHaveBeenCalledWith('team/team_edit.tpl.html', 'TeamEditCtrl');
 
         // expect a query refresh
@@ -222,14 +216,9 @@ describe( 'Team functionality', function() {
     beforeEach(angular.mock.inject(function($controller){
       // setup a mock for the isNew flag
       scope.isNew = false;
-
+  
       //declare the controller and inject our parameters
       $controller('TeamEditCtrl', {$scope: scope, dialog: scope.fakeDialog, team: scope.fakeTeam, isNew: scope.isNew});
-
-      // edit controller gets a list of clubs to populate dropdown
-      scope.httpBackend.expect('GET', '../clubs.json').respond([]);
-      scope.$digest();
-      scope.httpBackend.flush();        
     }));
   
     // tests start here
