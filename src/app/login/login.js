@@ -49,7 +49,7 @@ angular.module( 'league.login', [
     $scope.submit({method: 'POST', 
                    url: '../users/password.json',
                    data: {user: {email: $scope.login_user.email}},
-                   success_message: "Reset instructions have been sent to your e-mail address",
+                   success_message: "Reset instructions have been sent to your e-mail address.",
                    error_entity: $scope.login_error});
   };
 
@@ -91,7 +91,7 @@ angular.module( 'league.login', [
 
   $scope.submit = function(parameters) {
     $scope.reset_messages();
-
+        
     $http({method: parameters.method,
            url: parameters.url,
            data: parameters.data})
@@ -100,14 +100,24 @@ angular.module( 'league.login', [
           parameters.error_entity.message = parameters.success_message;
           $scope.reset_users();
         } else {
-          parameters.error_entity.message = data.error;
+          if (data.error) {
+            parameters.error_entity.message = data.error;
+          } else {
+            // note that JSON.stringify is not supported in some older browsers, we're ignoring that
+            parameters.error_entity.message = "Success, but with an unexpected success code, potentially a server error, please report via support channels as this indicates a code defect.  Server response was: " + JSON.stringify(data);
+          }
         }
       })
       .error(function(data, status){
         if (status == 422) {
           parameters.error_entity.errors = data.errors;          
         } else {
-          parameters.error_entity.message = data.error;
+          if (data.error) {
+            parameters.error_entity.message = data.error;
+          } else {
+            // note that JSON.stringify is not supported in some older browsers, we're ignoring that
+            parameters.error_entity.message = "Unexplained error, potentially a server error, please report via support channels as this indicates a code defect.  Server response was: " + JSON.stringify(data);
+          }
         }
       });
   };
