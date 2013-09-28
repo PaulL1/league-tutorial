@@ -4,11 +4,23 @@
 
 <div class="modal-body">
   <div ng-show="error" class="error">
-    <p>Error: {{error.data}}</p>
+    <p class="error">Team could not be saved</p>
   </div>
-  <p>Name: <input ng-model="team.name" /></p>
-  <p>Captain: <input ng-model="team.captain" /></p>
-  <p>Club: <select ng-model="team.club_id" ng-options="club.id as club.name for club in clubs"></select></p>
+  <div ng-class="{error: error.data.name}">Name: <input ng-model="team.name" />
+    <div ng-show="error.data.name">
+      <div ng-repeat="field_error in error.data.name">{{field_error}}</div>
+    </div>
+  </div>
+  <div ng-class="{error: error.data.captain}">Captain: <input ng-model="team.captain" />
+    <div ng-show="error.data.captain">
+      <div ng-repeat="field_error in error.data.captain">{{field_error}}</div>
+    </div>
+  </div>
+  <div ng-class="{error: error.data.club_id}">Club: <select ng-model="team.club_id" ng-options="club.id as club.name for club in clubs"></select>
+    <div ng-show="error.data.club_id">
+      <div ng-repeat="field_error in error.data.club_id">{{field_error}}</div>
+    </div>
+  </div>
 </div>
 
 <div class="modal-footer">

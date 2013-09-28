@@ -14,7 +14,6 @@ describe( 'Club functionality', function() {
     scope.httpBackend = _$httpBackend_;
 
     // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
-   // setup a mock for the dialog - when called it returns the value that was input when it was instantiated
     scope.fakeDialog = {
       response: null,
       isNew: null,
@@ -84,8 +83,8 @@ describe( 'Club functionality', function() {
       scope.$digest();
       scope.httpBackend.flush();
     }));
-    
-    describe( 'Initial render', function() {
+   
+    describe( 'Initial render', function() {      
       it('Has two clubs defined', function(){
         expect(scope.clubs.length).toEqual(2);
       });
@@ -95,7 +94,7 @@ describe( 'Club functionality', function() {
       });
     });
     
-    describe('Other controller methods', function(){      
+    describe('Other controller methods', function(){
       it('Calls edit on first row, cancel', function() {
         scope.fakeDialog.response = 'cancel';
 
