@@ -1,10 +1,12 @@
 angular.module( 'league', [
   'templates-app',
   'templates-common',
+  'common.authentication',
   'league.home',
   'league.about',
   'league.club',
   'league.team',
+  'league.login',
   'ui.state',
   'ui.route'
 ])

@@ -1,4 +1,5 @@
 class ClubsController < ApplicationController
+  before_filter :authenticate_user!
   before_filter :intercept_html_requests
   layout false
   respond_to :json

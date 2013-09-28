@@ -1,0 +1,58 @@
+<div>
+  <h1>Login</h1>
+</div>
+
+<div ng-show="login_error.message" class="error">
+  <p>{{login_error.message}}</p>
+</div>
+
+<div class="body">
+  <div ng-class="{error: login_error.errors.email}">Email: <input ng-model="login_user.email" />
+    <div ng-show="login_error.errors.email">
+      <div ng-repeat="field_error in login_error.errors.email">{{field_error}}</div>
+    </div>
+  </div>
+
+  <div ng-class="{error: login_error.errors.password}">Password: <input type="password" ng-model="login_user.password" />
+    <div ng-show="login_error.errors.password">
+      <div ng-repeat="field_error in login_error.errors.password">{{field_error}}</div>
+    </div>
+  </div>
+
+  <button ng-click="login()" class="btn btn-primary" >Login</button>
+  <button ng-click="logout()" class="btn btn-primary" >Logout</button>
+  <button ng-click="password_reset()" class="btn btn-primary" >Reset Password</button>
+  <button ng-click="unlock()" class="btn btn-primary" >Unlock</button>
+  <button ng-click="confirm()" class="btn btn-primary" >Confirm</button>
+</div>
+
+<div>
+  <h1>Register</h1>
+</div>
+
+<div ng-show="register_error.message" class="error">
+  <p>{{register_error.message}}</p>
+</div>
+
+<div class="body">
+  <div ng-class="{error: register_error.errors.email}">Email: <input ng-model="register_user.email" />
+    <div ng-show="register_error.errors.email">
+      <div ng-repeat="field_error in register_error.errors.email">{{field_error}}</div>
+    </div>
+  </div>
+
+  <div ng-class="{error: register_error.errors.password}">Password: <input type="password" ng-model="register_user.password" />
+    <div ng-show="register_error.errors.password">
+      <div ng-repeat="field_error in register_error.errors.password">{{field_error}}</div>
+    </div>
+  </div>
+
+  <div ng-class="{error: register_error.errors.password_confirmation}">Confirm password: <input type="password" ng-model="register_user.password_confirmation" />
+    <div ng-show="register_error.errors.password_confirmation">
+      <div ng-repeat="field_error in register_error.errors.password_confirmation">{{field_error}}</div>
+    </div>
+  </div>
+
+  <button ng-click="register()" class="btn btn-primary" >Register</button>
+  <button ng-click="change_password()" class="btn btn-primary" >Change Password</button>
+</div>
