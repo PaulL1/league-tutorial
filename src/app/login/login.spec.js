@@ -38,7 +38,7 @@ describe( 'Login functionality.', function() {
       // We test all combinations of error codes on the submit method, as that lets us then do only a couple of cases on each of the business facing
       // methods.
       it('success 201', function() {
-        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(201, '');
+        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(201, '{"user":{"language": "en-US"}}');
         
         // call edit
         scope.submit({method: 'POST', url: '../users/sign_in.json', data: '{"user":{"email":"test@example.com","password":"apassword"}}', success_message: 'You have been logged in.', error_entity: scope.login_error});
@@ -51,7 +51,7 @@ describe( 'Login functionality.', function() {
       });
 
       it('success 204', function() {
-        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(204, '');
+        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(204, '{"user":{"language": "en-US"}}');
         
         // call edit
         scope.submit({method: 'POST', url: '../users/sign_in.json', data: '{"user":{"email":"test@example.com","password":"apassword"}}', success_message: 'You have been logged in.', error_entity: scope.login_error});
@@ -121,7 +121,7 @@ describe( 'Login functionality.', function() {
         scope.register_error.message = "Fred";
         scope.register_error.errors = {email: ["Has an error"]};
         
-        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(201, '');
+        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(201, '{"user":{"language": "en-US"}}');
         
         // call edit
         scope.submit({method: 'POST', url: '../users/sign_in.json', data: '{"user":{"email":"test@example.com","password":"apassword"}}', success_message: 'You have been logged in.', error_entity: scope.login_error});
@@ -162,7 +162,7 @@ describe( 'Login functionality.', function() {
         scope.register_user.password = "apassword";
         scope.register_user.password_confirmation = "apassword";
         
-        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(201, '');
+        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(201, '{"user":{"language": "en-US"}}');
         
         // call edit
         scope.submit({method: 'POST', url: '../users/sign_in.json', data: '{"user":{"email":"test@example.com","password":"apassword"}}', success_message: 'You have been logged in.', error_entity: scope.login_error});
@@ -204,7 +204,7 @@ describe( 'Login functionality.', function() {
       // we only test 204 and 422, as those are our expected errors.  The others were covered in the submit testing
       it('success 204', function() {
         scope.login_user = {email: 'test@example.com', password: 'apassword'}; 
-        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(204, '');
+        scope.httpBackend.expect('POST', '../users/sign_in.json', '{"user":{"email":"test@example.com","password":"apassword"}}').respond(204, '{"user":{"language": "en-US"}}');
         
         // call edit
         scope.login();

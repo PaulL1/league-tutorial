@@ -53,6 +53,12 @@
     </div>
   </div>
 
+  <div ng-class="{error: register_error.errors.language}">Language: <input ng-model="register_user.language" />
+    <div ng-show="register_error.errors.language">
+      <div ng-repeat="field_error in register_error.errors.language">{{field_error}}</div>
+    </div>
+  </div>
+
   <button ng-click="register()" class="btn btn-primary" >Register</button>
   <button ng-click="change_password()" class="btn btn-primary" >Change Password</button>
 </div>

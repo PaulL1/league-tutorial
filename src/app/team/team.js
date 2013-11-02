@@ -27,8 +27,10 @@ angular.module( 'league.team', [
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'TeamCtrl', function TeamController( $scope, TeamRes, $dialog, $stateParams ) {
+.controller( 'TeamCtrl', function TeamController( $scope, TeamRes, $dialog, $stateParams, $translate, $translatePartialLoader ) {
   $scope.teams = TeamRes.query();
+  $translatePartialLoader.addPart('team');
+  $translate.refresh();
 
   $scope.club_id = parseInt($stateParams.club_id, 10);
 
@@ -43,18 +45,25 @@ angular.module( 'league.team', [
     };
   }
 
+  $scope.setColumnDefs = function(){
+    var columnDefs = [
+      {field: 'id', displayName: $translate('Team_id_Column')},
+      {field: 'name', displayName: $translate('Team_name_Column')},
+      {field: 'captain', displayName: $translate('Team_captain_Column')},
+      {field: 'club_id', displayName: $translate('Team_club_id_Column'), groupable: true, visible: false},
+      {field: 'club_name', displayName: $translate('Team_club_name_Column'), groupable: true},
+      {field: 'date_created', displayName: $translate('Team_date_created_Column'), cellFilter: "date:mediumDate"},
+      {displayName: $translate('Team_Edit_Column'), cellTemplate: '<button id="editBtn" type="button" class="btn btn-primary" ng-click="editTeam(row.entity)" >{{"Team_Edit_Button" | translate}}</button> '},
+      {displayName: $translate('Delete'), cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteTeam(row.entity)" >{{"Team_Delete_Button" | translate}}</button> '}
+    ];
+    $scope.columnDefs = columnDefs;
+  };
+  
+  $scope.setColumnDefs();
+
   $scope.gridOptions = {
     data: 'teams',
-    columnDefs: [
-      {field: 'id', displayName: 'Id'},
-      {field: 'name', displayName: 'Team Name'},
-      {field: 'captain', displayName: 'Captain'},
-      {field: 'club_id', displayName: 'Club Id', groupable: true, visible: false},
-      {field: 'club_name', displayName: 'Club Name', groupable: true},
-      {field: 'date_created', displayName: 'Date Created', cellFilter: "date:mediumDate"},
-      {displayName: 'Edit', cellTemplate: '<button id="editBtn" type="button" class="btn btn-primary" ng-click="editTeam(row.entity)" >Edit</button> '},
-      {displayName: 'Delete', cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteTeam(row.entity)" >Delete</button> '}
-    ],
+    columnDefs: 'columnDefs',
     multiSelect: false,
     filterOptions: $scope.filterOptions,
     showColumnMenu: true,
@@ -62,6 +71,10 @@ angular.module( 'league.team', [
     groups: ["club_name"]
   };
 
+  $scope.$on('$translateChangeSuccess', function() {
+    $scope.setColumnDefs();  
+  });
+  
   $scope.editTeam = function(team) {
     $scope.myDialog = $dialog.dialog({dialogFade: false, resolve: {team: function(){return angular.copy(team);}, isNew: function() {return false;}}});
     $scope.myDialog.open('team/team_edit.tpl.html', 'TeamEditCtrl').then(function(result){

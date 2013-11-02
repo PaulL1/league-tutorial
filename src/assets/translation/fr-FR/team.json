@@ -1,0 +1,16 @@
+{
+  "Team_Title": "Fonctions d'équipe",
+  "Team_Informational_Message": "Il s'agit de la fonction de maintenance de l'équipe",
+  "Team_Filter_Title": "Filtrez",
+  "Team_id_Column": "équipe Id",
+  "Team_name_Column": "Nom de l'équipe",
+  "Team_captain_Column": "Capitaine",
+  "Team_club_id_Column": "Club Id",
+  "Team_club_name_Column": "Nom du club",
+  "Team_date_created_Column": "Date de création",
+  "Team_Edit_Column": "Modifier",
+  "Team_Delete_Column": "Supprimer",
+  "Team_New_Button": "nouvelle équipe",
+  "Team_Edit_Button": "Modifier",
+  "Team_Delete_Button": "Supprimer"
+}

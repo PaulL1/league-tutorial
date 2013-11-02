@@ -1,0 +1,16 @@
+{
+  "Team_Title": "Team Functions",
+  "Team_Informational_Message": "This is the team maintenance function",
+  "Team_Filter_Title": "Filter",
+  "Team_id_Column": "Team Id",
+  "Team_name_Column": "Team Name",
+  "Team_captain_Column": "Captain",
+  "Team_club_id_Column": "Club Id",
+  "Team_club_name_Column": "Club Name",
+  "Team_date_created_Column": "Date Created",
+  "Team_Edit_Column": "Edit",
+  "Team_Delete_Column": "Delete",
+  "Team_New_Button": "New Team",
+  "Team_Edit_Button": "Edit",
+  "Team_Delete_Button": "Delete"
+}

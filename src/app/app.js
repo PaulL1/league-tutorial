@@ -3,6 +3,8 @@ angular.module( 'league', [
   'templates-common',
   'common.error_handling',
   'common.authentication',
+  'pascalprecht.translate',
+  'angularTranslateApp',
   'league.home',
   'league.about',
   'league.club',

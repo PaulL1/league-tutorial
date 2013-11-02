@@ -24,7 +24,7 @@ angular.module( 'league.login', [
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'LoginCtrl', function LoginController( $scope, $http ) {
+.controller( 'LoginCtrl', function LoginController( $scope, $http, $translate ) {
   $scope.login_user = {email: null, password: null};
   $scope.login_error = {message: null, errors: {}};    
   $scope.register_user = {email: null, password: null, password_confirmation: null};
@@ -74,7 +74,8 @@ angular.module( 'league.login', [
                    url: '../users.json',
                    data: {user: {email: $scope.register_user.email,
                                  password: $scope.register_user.password,
-                                 password_confirmation: $scope.register_user.password_confirmation}},
+                                 password_confirmation: $scope.register_user.password_confirmation,
+                                 language: $scope.register_user.language}},
                    success_message: "You have been registered and logged in.  A confirmation e-mail has been sent to your e-mail address, your access will terminate in 2 days if you do not use the link in that e-mail.",
                    error_entity: $scope.register_error});
   };
@@ -99,6 +100,9 @@ angular.module( 'league.login', [
         if (status == 201 || status == 204){
           parameters.error_entity.message = parameters.success_message;
           $scope.reset_users();
+          if(parameters.url=='../users/sign_in.json' || parameters.url=='../users/sign_up.json') {
+            $translate.uses(data.user.language);
+          }
         } else {
           if (data.error) {
             parameters.error_entity.message = data.error;

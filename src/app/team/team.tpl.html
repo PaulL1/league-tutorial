@@ -1,10 +1,10 @@
 <div>
-  <h1>Team functions</h1>
-  <p>Soon this will show a list of all the teams, based on information from the server</p>
+  <h1>{{'Team_Title' | translate}}</h1>
+  <p>{{'Team_Informational_Message' | translate}}</p>
 </div>
 
 <div class="body">
-  <strong>Filter:</strong><input type="text" ng-model="filterOptions.filterText" />
+  <strong>{{'Team_Filter_Title' | translate}}:</strong><input type="text" ng-model="filterOptions.filterText" />
   <div class="gridStyle" ng-grid="gridOptions"></div>
-  <button ng-click="newTeam()" class="btn btn-primary" >New Team</button>
+  <button ng-click="newTeam()" class="btn btn-primary" >{{'Team_New_Button' | translate}}</button>
 </div>
