@@ -1,6 +1,7 @@
 angular.module( 'league', [
   'templates-app',
   'templates-common',
+  'common.error_handling',
   'league.home',
   'league.about',
   'league.club',
