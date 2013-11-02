@@ -101,7 +101,8 @@ angular.module( 'league.login', [
           parameters.error_entity.message = parameters.success_message;
           $scope.reset_users();
           if(parameters.url=='../users/sign_in.json' || parameters.url=='../users/sign_up.json') {
-            $translate.uses(data.user.language);
+            $translate.uses(data.language);
+            //$translate.refresh();
           }
         } else {
           if (data.error) {

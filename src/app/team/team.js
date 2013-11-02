@@ -54,7 +54,7 @@ angular.module( 'league.team', [
       {field: 'club_name', displayName: $translate('Team_club_name_Column'), groupable: true},
       {field: 'date_created', displayName: $translate('Team_date_created_Column'), cellFilter: "date:mediumDate"},
       {displayName: $translate('Team_Edit_Column'), cellTemplate: '<button id="editBtn" type="button" class="btn btn-primary" ng-click="editTeam(row.entity)" >{{"Team_Edit_Button" | translate}}</button> '},
-      {displayName: $translate('Delete'), cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteTeam(row.entity)" >{{"Team_Delete_Button" | translate}}</button> '}
+      {displayName: $translate('Team_Delete_Column'), cellTemplate: '<button id="deleteBtn" type="button" class="btn btn-primary" ng-click="deleteTeam(row.entity)" >{{"Team_Delete_Button" | translate}}</button> '}
     ];
     $scope.columnDefs = columnDefs;
   };
